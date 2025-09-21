@@ -177,6 +177,7 @@ const AppContent: React.FC = () => {
               lines={state.lines}
               points={state.points}
               selectedUnit={state.selectedUnit}
+              pixelsPerUnit={state.calibration.pixelsPerUnit}
               onClearAll={clearAll}
               activeMode={state.activeMode}
             />

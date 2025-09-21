@@ -15,7 +15,6 @@ export interface Line {
   startPointId: string;
   endPointId: string;
   type: 'calibration' | 'measurement';
-  distance?: number; // Calculated distance in selected units
 }
 
 // Calibration data

@@ -256,11 +256,11 @@ type AppAction =
   - [ ] Touch-friendly point manipulation
   - [ ] Responsive canvas interactions
 
-- [x] **T016: Advanced Features**
+- [x] **T016: Advanced Features** ✅ COMPLETED
   - [x] Measurement list in sidebar
+  - [x] Measurement values in the sidebar
   - [x] Clear all functionality
   - [x] Better tool state management
-  - [ ] Keyboard shortcuts
 
 - [x] **T017: Real-time Calibration Updates** ✅ COMPLETED
   - [x] Pixel-to-unit ratio updates when calibration points are dragged
