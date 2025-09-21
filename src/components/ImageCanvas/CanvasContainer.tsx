@@ -11,6 +11,7 @@ interface CanvasContainerProps {
   stageRef: React.RefObject<any>;
   onStageClick: (e: any) => void;
   onStageWheel: (e: any) => void;
+  onStageDragStart: () => void;
   onStageDragEnd: (e: any) => void;
   onPointDrag: (pointId: string, x: number, y: number) => void;
   onPointClick: (pointId: string) => void;
@@ -22,6 +23,7 @@ export const CanvasContainer: React.FC<CanvasContainerProps> = ({
   stageRef,
   onStageClick,
   onStageWheel,
+  onStageDragStart,
   onStageDragEnd,
   onPointDrag,
   onPointClick,
@@ -46,9 +48,10 @@ export const CanvasContainer: React.FC<CanvasContainerProps> = ({
         ref={stageRef}
         width={800}
         height={600}
-        draggable={state.activeMode === 'pan'}
+        draggable={true}
         onClick={onStageClick}
         onWheel={onStageWheel}
+        onDragStart={onStageDragStart}
         onDragEnd={onStageDragEnd}
         scaleX={image.scale}
         scaleY={image.scale}

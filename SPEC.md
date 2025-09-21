@@ -42,6 +42,7 @@
     *   Mouse wheel or pinch gesture for zooming in/out.
     *   Click-and-drag for panning the image.
     *   "Fit to Screen" button/option. This functionality is always available when an image is loaded, regardless of the active "tool" (Calibrate/Measure).
+    *   Pan functionality is available in all modes (Calibrate, Measure, and Pan) for improved usability.
 
 **2.2 Calibration Tool:**
 

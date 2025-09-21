@@ -28,6 +28,7 @@ const AppContent: React.FC = () => {
   } = useApp();
 
   const stageRef = useRef<any>(null);
+  const isDraggingRef = useRef(false);
 
   const handleImageUpload = useCallback((file: File, url: string, dimensions: { width: number; height: number }) => {
     dispatch({ type: 'SET_IMAGE', payload: { file, url, dimensions } });
@@ -35,6 +36,12 @@ const AppContent: React.FC = () => {
 
   const handleStageClick = useCallback((e: any) => {
     if (!state.image.url) return;
+
+    // Don't add points if we were dragging (panning)
+    if (isDraggingRef.current) {
+      isDraggingRef.current = false;
+      return;
+    }
 
     const stage = e.target.getStage();
     const pointerPosition = stage.getPointerPosition();
@@ -80,6 +87,10 @@ const AppContent: React.FC = () => {
 
     setPan(newPos.x, newPos.y);
   }, [setZoom, setPan]);
+
+  const handleStageDragStart = useCallback(() => {
+    isDraggingRef.current = true;
+  }, []);
 
   const handleStageDragEnd = useCallback((e: any) => {
     // Only handle stage drag end if the target is the stage itself, not a child element
@@ -143,6 +154,7 @@ const AppContent: React.FC = () => {
             stageRef={stageRef}
             onStageClick={handleStageClick}
             onStageWheel={handleStageWheel}
+            onStageDragStart={handleStageDragStart}
             onStageDragEnd={handleStageDragEnd}
             onPointDrag={handlePointDrag}
             onPointClick={handlePointClick}
