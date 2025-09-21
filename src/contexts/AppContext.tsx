@@ -110,6 +110,13 @@ function appReducer(state: AppState, action: AppAction): AppState {
           ...updatedState.calibration,
           points: calibrationPoints.slice(-2) as [Point, Point] | null,
         };
+
+        // Recalculate calibration if we have 2 points and a known distance
+        if (calibrationPoints.length === 2 && state.calibration.actualDistance !== null) {
+          const pixelDistance = calculatePixelDistance(calibrationPoints[0], calibrationPoints[1]);
+          const pixelsPerUnit = pixelDistance / state.calibration.actualDistance;
+          updatedState.calibration.pixelsPerUnit = pixelsPerUnit;
+        }
       }
 
       return updatedState;

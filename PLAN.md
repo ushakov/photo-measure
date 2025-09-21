@@ -241,9 +241,10 @@ type AppAction =
 #### Tasks:
 - [ ] **T013: Visual Polish**
   - [ ] Refine point and line styling
-  - [ ] Improve hover and selection states
   - [ ] Better cursor feedback
   - [ ] Enhanced visual hierarchy
+  - [ ] Show distances in measurement lines
+  - [ ] Show distances in sidebar
 
 - [ ] **T014: User Feedback**
   - [ ] Status messages and notifications
@@ -263,11 +264,17 @@ type AppAction =
   - [ ] Better tool state management
   - [ ] Keyboard shortcuts
 
+- [x] **T017: Real-time Calibration Updates** ✅ COMPLETED
+  - [x] Pixel-to-unit ratio updates when calibration points are dragged
+  - [x] Real-time recalculation during point movement
+  - [x] Maintains calibration accuracy during point adjustments
+
 #### Deliverables:
 - Polished, professional UI
 - Mobile-responsive design
 - Comprehensive user feedback
 - Enhanced accessibility
+- Real-time calibration updates
 
 ### Phase 5: Testing & Optimization (Week 5)
 
