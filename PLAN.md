@@ -144,10 +144,10 @@ type AppAction =
 **Goal:** Set up the basic application structure and image upload functionality.
 
 #### Tasks:
-- [ ] **T001: Project Setup**
-  - [ ] Install dependencies: Tailwind CSS, React Konva
-  - [ ] Configure Tailwind CSS
-  - [ ] Set up project structure
+- [x] **T001: Project Setup**
+  - [x] Install dependencies: Tailwind CSS, React Konva
+  - [x] Configure Tailwind CSS
+  - [x] Set up project structure
 
 - [x] **T002: Basic Layout**
   - [x] Create main app layout (canvas area + sidebar)
