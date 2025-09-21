@@ -56,9 +56,10 @@ export const CanvasContainer: React.FC<CanvasContainerProps> = ({
         y={image.offset.y}
       >
         <ImageLayer image={image} />
-        <LineLayer lines={state.lines} points={state.points} />
+        <LineLayer lines={state.lines} points={state.points} scale={image.scale} />
         <PointLayer
           points={state.points}
+          scale={image.scale}
           onPointDrag={onPointDrag}
           onPointClick={onPointClick}
           onPointDragEnd={onPointDragEnd}

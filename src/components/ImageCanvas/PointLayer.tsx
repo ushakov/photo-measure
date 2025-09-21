@@ -5,6 +5,7 @@ import { COLORS, POINT_RADIUS, CROSSHAIR_SIZE } from '../../constants';
 
 interface PointLayerProps {
   points: Point[];
+  scale: number;
   onPointDrag: (pointId: string, x: number, y: number) => void;
   onPointClick: (pointId: string) => void;
   onPointDragEnd: (pointId: string, x: number, y: number) => void;
@@ -12,6 +13,7 @@ interface PointLayerProps {
 
 export const PointLayer: React.FC<PointLayerProps> = ({
   points,
+  scale,
   onPointDrag,
   onPointClick,
   onPointDragEnd,
@@ -20,6 +22,13 @@ export const PointLayer: React.FC<PointLayerProps> = ({
     <Layer>
       {points.map((point) => {
         const color = point.type === 'calibration' ? COLORS.calibration : COLORS.measurement;
+
+        // Calculate inverse scale to keep markers consistent size
+        const inverseScale = 1 / scale;
+        const scaledRadius = POINT_RADIUS * inverseScale;
+        const scaledCrosshairSize = CROSSHAIR_SIZE * inverseScale;
+        const scaledStrokeWidth = 2 * inverseScale;
+        const scaledFontSize = 12 * inverseScale;
 
         return (
           <Group
@@ -37,30 +46,30 @@ export const PointLayer: React.FC<PointLayerProps> = ({
           >
             {/* Crosshair lines */}
             <Line
-              points={[-CROSSHAIR_SIZE/2, 0, CROSSHAIR_SIZE/2, 0]}
+              points={[-scaledCrosshairSize/2, 0, scaledCrosshairSize/2, 0]}
               stroke={color.point}
-              strokeWidth={2}
+              strokeWidth={scaledStrokeWidth}
             />
             <Line
-              points={[0, -CROSSHAIR_SIZE/2, 0, CROSSHAIR_SIZE/2]}
+              points={[0, -scaledCrosshairSize/2, 0, scaledCrosshairSize/2]}
               stroke={color.point}
-              strokeWidth={2}
+              strokeWidth={scaledStrokeWidth}
             />
 
             {/* Circle */}
             <Circle
-              radius={POINT_RADIUS}
+              radius={scaledRadius}
               stroke={color.point}
-              strokeWidth={2}
+              strokeWidth={scaledStrokeWidth}
               fill="transparent"
             />
 
             {/* Label */}
             <Text
               text={point.label}
-              x={POINT_RADIUS + 5}
-              y={-10}
-              fontSize={12}
+              x={scaledRadius + 5 * inverseScale}
+              y={-10 * inverseScale}
+              fontSize={scaledFontSize}
               fill={color.point}
               fontStyle="bold"
             />

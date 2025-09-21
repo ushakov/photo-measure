@@ -23,10 +23,10 @@ export const LINE_TYPES = {
 } as const;
 
 // Visual constants
-export const POINT_RADIUS = 8;
+export const POINT_RADIUS = 12;
 export const POINT_STROKE_WIDTH = 2;
 export const LINE_STROKE_WIDTH = 2;
-export const CROSSHAIR_SIZE = 12;
+export const CROSSHAIR_SIZE = 24;
 
 // Colors
 export const COLORS = {
