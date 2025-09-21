@@ -82,8 +82,11 @@ const AppContent: React.FC = () => {
   }, [setZoom, setPan]);
 
   const handleStageDragEnd = useCallback((e: any) => {
-    const stage = e.target;
-    setPan(stage.x(), stage.y());
+    // Only handle stage drag end if the target is the stage itself, not a child element
+    if (e.target === e.target.getStage()) {
+      const stage = e.target;
+      setPan(stage.x(), stage.y());
+    }
   }, [setPan]);
 
   const handlePointDrag = useCallback((pointId: string, x: number, y: number) => {
