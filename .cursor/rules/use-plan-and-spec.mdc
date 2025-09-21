@@ -1,0 +1,6 @@
+---
+description:
+globs:
+alwaysApply: true
+---
+Read @PLAN.md and @SPEC.md for the context, update them when the code is updated.
