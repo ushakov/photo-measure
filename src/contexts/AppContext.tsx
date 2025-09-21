@@ -21,7 +21,6 @@ const initialState: AppState = {
   lines: [],
   selectedUnit: DEFAULT_UNIT,
   activeMode: 'pan',
-  selectedPoints: [],
 };
 
 function appReducer(state: AppState, action: AppAction): AppState {
@@ -43,45 +42,139 @@ function appReducer(state: AppState, action: AppAction): AppState {
       return {
         ...state,
         activeMode: action.payload,
-        selectedPoints: [],
       };
 
     case 'ADD_POINT':
-      return {
+      const newState = {
         ...state,
         points: [...state.points, action.payload],
       };
 
+      // Update calibration points if it's a calibration point
+      if (action.payload.type === 'calibration') {
+        const calibrationPoints = newState.points.filter(p => p.type === 'calibration');
+        newState.calibration = {
+          ...newState.calibration,
+          points: calibrationPoints.slice(-2) as [Point, Point] | null, // Keep only last 2 points
+        };
+
+        // Auto-create calibration line when second point is added
+        if (calibrationPoints.length === 2) {
+          const line: Line = {
+            id: generateId(),
+            startPointId: calibrationPoints[0].id,
+            endPointId: calibrationPoints[1].id,
+            type: 'calibration',
+          };
+          newState.lines = [...newState.lines, line];
+          newState.calibration.line = line;
+        }
+      }
+
+      // Auto-create measurement lines for measurement points (pair 2nd to 1st, 4th to 3rd, etc.)
+      if (action.payload.type === 'measurement') {
+        const measurementPoints = newState.points.filter(p => p.type === 'measurement');
+
+        // If we have an even number of measurement points, create a line
+        if (measurementPoints.length % 2 === 0 && measurementPoints.length >= 2) {
+          const lastTwoPoints = measurementPoints.slice(-2);
+          const line: Line = {
+            id: generateId(),
+            startPointId: lastTwoPoints[0].id,
+            endPointId: lastTwoPoints[1].id,
+            type: 'measurement',
+          };
+          newState.lines = [...newState.lines, line];
+        }
+      }
+
+      return newState;
+
     case 'UPDATE_POINT':
-      return {
+      const updatedPoints = state.points.map(point =>
+        point.id === action.payload.id
+          ? { ...point, x: action.payload.x, y: action.payload.y }
+          : point
+      );
+
+      const updatedState = {
         ...state,
-        points: state.points.map(point =>
-          point.id === action.payload.id
-            ? { ...point, x: action.payload.x, y: action.payload.y }
-            : point
-        ),
+        points: updatedPoints,
       };
+
+      // Update calibration points if a calibration point was updated
+      const updatedPoint = updatedPoints.find(p => p.id === action.payload.id);
+      if (updatedPoint?.type === 'calibration') {
+        const calibrationPoints = updatedPoints.filter(p => p.type === 'calibration');
+        updatedState.calibration = {
+          ...updatedState.calibration,
+          points: calibrationPoints.slice(-2) as [Point, Point] | null,
+        };
+      }
+
+      return updatedState;
 
     case 'DELETE_POINT':
-      return {
+      const deletedPoint = state.points.find(p => p.id === action.payload);
+      const filteredPoints = state.points.filter(point => point.id !== action.payload);
+      const filteredLines = state.lines.filter(line =>
+        line.startPointId !== action.payload && line.endPointId !== action.payload
+      );
+
+      const deleteState = {
         ...state,
-        points: state.points.filter(point => point.id !== action.payload),
-        lines: state.lines.filter(line =>
-          line.startPointId !== action.payload && line.endPointId !== action.payload
-        ),
+        points: filteredPoints,
+        lines: filteredLines,
       };
 
+      // Update calibration points if a calibration point was deleted
+      if (deletedPoint?.type === 'calibration') {
+        const calibrationPoints = filteredPoints.filter(p => p.type === 'calibration');
+        deleteState.calibration = {
+          ...deleteState.calibration,
+          points: calibrationPoints.length >= 2 ? calibrationPoints.slice(-2) as [Point, Point] : null,
+          line: calibrationPoints.length < 2 ? null : deleteState.calibration.line,
+          actualDistance: calibrationPoints.length < 2 ? null : deleteState.calibration.actualDistance,
+          pixelsPerUnit: calibrationPoints.length < 2 ? null : deleteState.calibration.pixelsPerUnit,
+        };
+      }
+
+      return deleteState;
+
     case 'ADD_LINE':
-      return {
+      const lineState = {
         ...state,
         lines: [...state.lines, action.payload],
       };
 
+      // Update calibration line if it's a calibration line
+      if (action.payload.type === 'calibration') {
+        lineState.calibration = {
+          ...lineState.calibration,
+          line: action.payload,
+        };
+      }
+
+      return lineState;
+
     case 'DELETE_LINE':
-      return {
+      const deletedLine = state.lines.find(l => l.id === action.payload);
+      const deleteLineState = {
         ...state,
         lines: state.lines.filter(line => line.id !== action.payload),
       };
+
+      // Update calibration line if a calibration line was deleted
+      if (deletedLine?.type === 'calibration') {
+        deleteLineState.calibration = {
+          ...deleteLineState.calibration,
+          line: null,
+          actualDistance: null,
+          pixelsPerUnit: null,
+        };
+      }
+
+      return deleteLineState;
 
     case 'SET_CALIBRATION_DISTANCE':
       const calibrationPoints = state.calibration.points;
@@ -105,6 +198,7 @@ function appReducer(state: AppState, action: AppAction): AppState {
         ...state,
         selectedUnit: action.payload,
       };
+
 
     case 'SET_ZOOM':
       return {
@@ -135,7 +229,6 @@ function appReducer(state: AppState, action: AppAction): AppState {
         },
         points: [],
         lines: [],
-        selectedPoints: [],
       };
 
     default:

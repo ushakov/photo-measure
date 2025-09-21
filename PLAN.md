@@ -172,67 +172,67 @@ type AppAction =
 - Responsive layout structure
 - Image display with proper scaling
 
-### Phase 2: Calibration System (Week 2)
+### Phase 2: Calibration System (Week 2) ✅ COMPLETED
 
 **Goal:** Implement the calibration tool for setting measurement scale.
 
 #### Tasks:
-- [ ] **T005: Calibration Mode**
-  - [ ] Add tool selection (Calibrate/Measure modes)
-  - [ ] Implement calibration point placement (2 points max)
-  - [ ] Visual representation of calibration points and line
+- [x] **T005: Calibration Mode**
+  - [x] Add tool selection (Calibrate/Measure modes)
+  - [x] Implement calibration point placement (2 points max)
+  - [x] Visual representation of calibration points and line
 
-- [ ] **T006: Point Interaction**
-  - [ ] Click-and-drag functionality for calibration points
-  - [ ] Hover effects and visual feedback
-  - [ ] Point deletion/replacement capability
+- [x] **T006: Point Interaction**
+  - [x] Click-and-drag functionality for calibration points
+  - [x] Hover effects and visual feedback
+  - [x] Point deletion/replacement capability
 
-- [ ] **T007: Calibration Input**
-  - [ ] Distance input field
-  - [ ] Units selector (mm, cm, inches)
-  - [ ] Real-time calculation of pixels-per-unit ratio
+- [x] **T007: Calibration Input**
+  - [x] Distance input field
+  - [x] Units selector (mm, cm, inches)
+  - [x] Real-time calculation of pixels-per-unit ratio
 
-- [ ] **T008: Visual Design**
-  - [ ] Implement point design (empty circle with crosshairs)
-  - [ ] Calibration line styling (dashed red line)
-  - [ ] Point labels (C1, C2)
+- [x] **T008: Visual Design**
+  - [x] Implement point design (empty circle with crosshairs)
+  - [x] Calibration line styling (dashed red line)
+  - [x] Point labels (C1, C2)
 
 #### Deliverables:
-- Working calibration tool with 2-point placement
-- Draggable calibration points
-- Distance input and unit conversion
-- Pixels-per-unit calculation system
+- ✅ Working calibration tool with 2-point placement
+- ✅ Draggable calibration points
+- ✅ Distance input and unit conversion
+- ✅ Pixels-per-unit calculation system
 
-### Phase 3: Measurement System (Week 3)
+### Phase 3: Measurement System (Week 3) ✅ COMPLETED
 
 **Goal:** Implement the measurement tool for arbitrary distance measurements.
 
 #### Tasks:
-- [ ] **T009: Measurement Mode**
-  - [ ] Switch to measurement mode
-  - [ ] Multiple measurement point placement
-  - [ ] Point numbering system (M1, M2, M3, etc.)
+- [x] **T009: Measurement Mode**
+  - [x] Switch to measurement mode
+  - [x] Multiple measurement point placement
+  - [x] Point numbering system (M1, M2, M3, etc.)
 
-- [ ] **T010: Line Creation**
-  - [ ] Point selection system for creating measurement lines
-  - [ ] Multiple measurement lines support
-  - [ ] Line management (creation/deletion)
+- [x] **T010: Line Creation**
+  - [x] Automatic pairing system for creating measurement lines (2nd to 1st, 4th to 3rd, etc.)
+  - [x] Multiple measurement lines support
+  - [x] Line management (creation/deletion)
 
-- [ ] **T011: Distance Calculation**
-  - [ ] Real-time distance calculation using calibration
-  - [ ] Display distance labels on measurement lines
-  - [ ] Unit conversion for measurements
+- [x] **T011: Distance Calculation**
+  - [x] Real-time distance calculation using calibration
+  - [x] Display distance labels on measurement lines
+  - [x] Unit conversion for measurements
 
-- [ ] **T012: Point Management**
-  - [ ] Drag functionality for measurement points
-  - [ ] Point and line deletion
-  - [ ] Visual feedback for selections
+- [x] **T012: Point Management**
+  - [x] Drag functionality for measurement points
+  - [x] Point and line deletion
+  - [x] Visual feedback for selections
 
 #### Deliverables:
-- Multiple measurement point placement
-- Measurement line creation between any two points
-- Real-time distance calculations
-- Interactive point manipulation
+- ✅ Multiple measurement point placement
+- ✅ Measurement line creation between any two points
+- ✅ Real-time distance calculations
+- ✅ Interactive point manipulation
 
 ### Phase 4: Enhanced UI/UX (Week 4)
 

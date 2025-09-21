@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Layer, Circle, Text, Group, Line } from 'react-konva';
 import type { Point } from '../../types';
 import { COLORS, POINT_RADIUS, CROSSHAIR_SIZE } from '../../constants';
@@ -18,10 +18,13 @@ export const PointLayer: React.FC<PointLayerProps> = ({
   onPointClick,
   onPointDragEnd,
 }) => {
+  const [hoveredPoint, setHoveredPoint] = useState<string | null>(null);
+
   return (
     <Layer>
       {points.map((point) => {
         const color = point.type === 'calibration' ? COLORS.calibration : COLORS.measurement;
+        const isHovered = hoveredPoint === point.id;
 
         // Calculate inverse scale to keep markers consistent size
         const inverseScale = 1 / scale;
@@ -29,6 +32,9 @@ export const PointLayer: React.FC<PointLayerProps> = ({
         const scaledCrosshairSize = CROSSHAIR_SIZE * inverseScale;
         const scaledStrokeWidth = 2 * inverseScale;
         const scaledFontSize = 12 * inverseScale;
+
+        // Use hover color if hovered
+        const pointColor = isHovered ? color.pointHover : color.point;
 
         return (
           <Group
@@ -43,23 +49,25 @@ export const PointLayer: React.FC<PointLayerProps> = ({
             onDragEnd={(e) => {
               onPointDragEnd(point.id, e.target.x(), e.target.y());
             }}
+            onMouseEnter={() => setHoveredPoint(point.id)}
+            onMouseLeave={() => setHoveredPoint(null)}
           >
             {/* Crosshair lines */}
             <Line
               points={[-scaledCrosshairSize/2, 0, scaledCrosshairSize/2, 0]}
-              stroke={color.point}
+              stroke={pointColor}
               strokeWidth={scaledStrokeWidth}
             />
             <Line
               points={[0, -scaledCrosshairSize/2, 0, scaledCrosshairSize/2]}
-              stroke={color.point}
+              stroke={pointColor}
               strokeWidth={scaledStrokeWidth}
             />
 
             {/* Circle */}
             <Circle
               radius={scaledRadius}
-              stroke={color.point}
+              stroke={pointColor}
               strokeWidth={scaledStrokeWidth}
               fill="transparent"
             />
@@ -70,7 +78,7 @@ export const PointLayer: React.FC<PointLayerProps> = ({
               x={scaledRadius + 5 * inverseScale}
               y={-10 * inverseScale}
               fontSize={scaledFontSize}
-              fill={color.point}
+              fill={pointColor}
               fontStyle="bold"
             />
           </Group>

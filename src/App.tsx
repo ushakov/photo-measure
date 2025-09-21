@@ -9,7 +9,6 @@ import {
   UnitsSelector,
   ActionButtons
 } from './components/Sidebar';
-import { generateId } from './utils';
 import './App.css';
 
 const AppContent: React.FC = () => {
@@ -18,7 +17,6 @@ const AppContent: React.FC = () => {
     dispatch,
     addPoint,
     updatePoint,
-    addLine,
     setCalibrationDistance,
     setUnit,
     setMode,
@@ -50,19 +48,12 @@ const AppContent: React.FC = () => {
     if (state.activeMode === 'calibrate') {
       const calibrationPoints = state.points.filter(p => p.type === 'calibration');
       if (calibrationPoints.length < 2) {
-        const newPointId = generateId();
         addPoint(transformed.x, transformed.y, 'calibration');
-
-        if (calibrationPoints.length === 1) {
-          // Create calibration line between first and new point
-          const firstPoint = calibrationPoints[0];
-          addLine(firstPoint.id, newPointId, 'calibration');
-        }
       }
     } else if (state.activeMode === 'measure') {
       addPoint(transformed.x, transformed.y, 'measurement');
     }
-  }, [state.image.url, state.activeMode, state.points, addPoint, addLine]);
+  }, [state.image.url, state.activeMode, state.points, addPoint]);
 
   const handleStageWheel = useCallback((e: any) => {
     e.evt.preventDefault();
@@ -106,7 +97,7 @@ const AppContent: React.FC = () => {
   }, [updatePoint]);
 
   const handlePointClick = useCallback((_pointId: string) => {
-    // Handle point selection logic here
+    // Handle point selection logic here if needed
   }, []);
 
   const handlePointDragEnd = useCallback((pointId: string, x: number, y: number) => {

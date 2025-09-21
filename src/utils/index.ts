@@ -66,6 +66,19 @@ export function generatePointLabel(type: 'calibration' | 'measurement', index: n
 }
 
 /**
+ * Calculate real-world distance between two points using calibration
+ */
+export function calculateRealDistance(
+  point1: Point,
+  point2: Point,
+  pixelsPerUnit: number | null
+): number | null {
+  if (!pixelsPerUnit) return null;
+  const pixelDistance = calculatePixelDistance(point1, point2);
+  return pixelsToUnits(pixelDistance, pixelsPerUnit);
+}
+
+/**
  * Format a distance value for display
  */
 export function formatDistance(distance: number, unit: MeasurementUnit): string {

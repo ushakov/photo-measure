@@ -1,16 +1,18 @@
 import React from 'react';
 import { Layer, Line as KonvaLine, Text } from 'react-konva';
-import type { Line, Point } from '../../types';
+import type { Line, Point, MeasurementUnit } from '../../types';
 import { COLORS } from '../../constants';
-import { formatDistance } from '../../utils';
+import { formatDistance, calculateRealDistance } from '../../utils';
 
 interface LineLayerProps {
   lines: Line[];
   points: Point[];
   scale: number;
+  pixelsPerUnit: number | null;
+  selectedUnit: MeasurementUnit;
 }
 
-export const LineLayer: React.FC<LineLayerProps> = ({ lines, points, scale }) => {
+export const LineLayer: React.FC<LineLayerProps> = ({ lines, points, scale, pixelsPerUnit, selectedUnit }) => {
   const getPointById = (id: string): Point | undefined => {
     return points.find(p => p.id === id);
   };
@@ -46,17 +48,22 @@ export const LineLayer: React.FC<LineLayerProps> = ({ lines, points, scale }) =>
             />
 
             {/* Distance label for measurement lines */}
-            {line.type === 'measurement' && line.distance !== undefined && (
-              <Text
-                x={midX}
-                y={midY - 10 * inverseScale}
-                text={formatDistance(line.distance, 'cm')} // TODO: Use actual unit from state
-                fontSize={scaledFontSize}
-                fill={color.line}
-                fontStyle="bold"
-                align="center"
-                offsetX={20 * inverseScale} // Approximate text width offset
-              />
+            {pixelsPerUnit && (
+              (() => {
+                const distance = calculateRealDistance(startPoint, endPoint, pixelsPerUnit);
+                return distance !== null ? (
+                  <Text
+                    x={midX}
+                    y={midY - 15 * inverseScale}
+                    text={formatDistance(distance, selectedUnit)}
+                    fontSize={scaledFontSize}
+                    fill={color.line}
+                    fontStyle="bold"
+                    align="center"
+                    offsetX={30 * inverseScale} // Approximate text width offset
+                  />
+                ) : null;
+              })()
             )}
           </React.Fragment>
         );

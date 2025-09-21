@@ -59,7 +59,13 @@ export const CanvasContainer: React.FC<CanvasContainerProps> = ({
         y={image.offset.y}
       >
         <ImageLayer image={image} />
-        <LineLayer lines={state.lines} points={state.points} scale={image.scale} />
+        <LineLayer
+          lines={state.lines}
+          points={state.points}
+          scale={image.scale}
+          pixelsPerUnit={state.calibration.pixelsPerUnit}
+          selectedUnit={state.selectedUnit}
+        />
         <PointLayer
           points={state.points}
           scale={image.scale}

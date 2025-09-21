@@ -43,7 +43,6 @@ export interface AppState {
   lines: Line[];
   selectedUnit: MeasurementUnit;
   activeMode: 'calibrate' | 'measure' | 'pan';
-  selectedPoints: string[]; // For creating measurement lines
 }
 
 // Measurement units
