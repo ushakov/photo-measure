@@ -273,6 +273,8 @@ type AppAction =
 - 🔄 Comprehensive user feedback (partial)
 - ✅ Enhanced accessibility
 - ✅ Real-time calibration updates
+- ✅ Custom SVG favicon
+- ✅ PWA installability via vite-plugin-pwa (icons generated from favicon.svg)
 
 ### Phase 5: Testing & Optimization (Week 5)
 

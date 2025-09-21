@@ -115,6 +115,10 @@
 *   **Feedback Messages:** Small, non-intrusive messages for user actions (e.g., "Image uploaded successfully," "Please place two calibration points").
 *   **Cursor Changes:** Cursor should change to indicate current mode (e.g., crosshair for adding points, grab hand for panning, default pointer for dragging existing points).
 
+#### 3.5 Branding
+
+*   **Favicon:** Include a custom SVG favicon representing measurement (crosshair + ruler).
+
 **3.3 Responsiveness:**
 
 *   The layout should adapt gracefully to different screen sizes, prioritizing the image display area.
@@ -127,3 +131,10 @@
 *   **Language:** TypeScript
 *   **Styling:** Tailwind CSS
 *   **Image Drawing, Pan & Zoom Library:** For robust image manipulation, interactive drawing of points and lines, and handling pan/zoom on a canvas: **React Konva** (a React wrapper for the Konva.js canvas library) or **Fabric.js** are excellent choices. They provide granular control over shapes, events, and performance for interactive graphics.
+
+#### 3.6 PWA & Installability
+
+- **Plugin**: Use `vite-plugin-pwa` to inject the Web App Manifest and auto-register the Service Worker.
+- **Icons**: Generate Android/Maskable and Apple touch icons from `public/favicon.svg` during build via the integrated assets generation.
+- **Manifest**: App name `Photo Measure`, short name `PhotoMeasure`, `display: standalone`, theme color `#0ea5e9`.
+- **Index**: Keep only the favicon link in `index.html`; the plugin injects the manifest and registration.
