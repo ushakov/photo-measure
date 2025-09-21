@@ -1,4 +1,4 @@
-import React, { useRef, useCallback } from 'react';
+import React, { useRef, useCallback, useState, useEffect } from 'react';
 import { AppProvider, useApp } from './contexts/AppContext';
 import { CanvasContainer } from './components/ImageCanvas';
 import {
@@ -27,6 +27,19 @@ const AppContent: React.FC = () => {
 
   const stageRef = useRef<any>(null);
   const isDraggingRef = useRef(false);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+
+  // Detect mobile screen size
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 1024);
+    };
+
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   const handleImageUpload = useCallback((file: File, url: string, dimensions: { width: number; height: number }) => {
     dispatch({ type: 'SET_IMAGE', payload: { file, url, dimensions } });
@@ -130,17 +143,34 @@ const AppContent: React.FC = () => {
   return (
     <div className="h-screen flex flex-col bg-gray-50">
       {/* Header */}
-      <header className="bg-white border-b border-gray-200 px-6 py-4">
-        <h1 className="text-2xl font-bold text-gray-900">Image Measurement Tool</h1>
-        <p className="text-sm text-gray-600 mt-1">
-          Upload an image, calibrate with a known distance, and measure anything
-        </p>
+      <header className="bg-white border-b border-gray-200 px-4 md:px-6 py-4">
+        <div className="flex items-center justify-between">
+          <div>
+            <h1 className="text-xl md:text-2xl font-bold text-gray-900">Image Measurement Tool</h1>
+            <p className="text-xs md:text-sm text-gray-600 mt-1 hidden sm:block">
+              Upload an image, calibrate with a known distance, and measure anything
+            </p>
+          </div>
+
+          {/* Mobile sidebar toggle */}
+          {isMobile && (
+            <button
+              onClick={() => setSidebarOpen(!sidebarOpen)}
+              className="p-2 rounded-lg bg-gray-100 hover:bg-gray-200 transition-colors"
+              aria-label="Toggle sidebar"
+            >
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+              </svg>
+            </button>
+          )}
+        </div>
       </header>
 
       {/* Main Content */}
-      <div className="flex-1 flex overflow-hidden">
+      <div className="flex-1 flex overflow-hidden relative">
         {/* Canvas Area */}
-        <div className="flex-1 p-6">
+        <div className={`flex-1 p-2 md:p-6 transition-all duration-300 ${isMobile && sidebarOpen ? 'opacity-50' : ''}`}>
           <CanvasContainer
             state={state}
             stageRef={stageRef}
@@ -151,50 +181,119 @@ const AppContent: React.FC = () => {
             onPointDrag={handlePointDrag}
             onPointClick={handlePointClick}
             onPointDragEnd={handlePointDragEnd}
+            isMobile={isMobile}
           />
         </div>
 
-        {/* Sidebar */}
-        <div className="w-80 bg-white border-l border-gray-200 p-6 overflow-y-auto">
-          <div className="space-y-8">
-            <ImageUpload onImageUpload={handleImageUpload} />
+        {/* Desktop Sidebar */}
+        {!isMobile && (
+          <div className="w-80 bg-white border-l border-gray-200 p-6 overflow-y-auto">
+            <div className="space-y-8">
+              <ImageUpload onImageUpload={handleImageUpload} />
 
-            <ToolSelector
-              activeMode={state.activeMode}
-              onModeChange={setMode}
-              hasImage={hasImage}
-            />
+              <ToolSelector
+                activeMode={state.activeMode}
+                onModeChange={setMode}
+                hasImage={hasImage}
+              />
 
-            <CalibrationPanel
-              calibration={state.calibration}
-              selectedUnit={state.selectedUnit}
-              onDistanceChange={setCalibrationDistance}
-              onUnitChange={setUnit}
-              activeMode={state.activeMode}
-            />
+              <CalibrationPanel
+                calibration={state.calibration}
+                selectedUnit={state.selectedUnit}
+                onDistanceChange={setCalibrationDistance}
+                onUnitChange={setUnit}
+                activeMode={state.activeMode}
+              />
 
-            <MeasurementPanel
-              lines={state.lines}
-              points={state.points}
-              selectedUnit={state.selectedUnit}
-              pixelsPerUnit={state.calibration.pixelsPerUnit}
-              onClearAll={clearAll}
-              activeMode={state.activeMode}
-            />
+              <MeasurementPanel
+                lines={state.lines}
+                points={state.points}
+                selectedUnit={state.selectedUnit}
+                pixelsPerUnit={state.calibration.pixelsPerUnit}
+                onClearAll={clearAll}
+                activeMode={state.activeMode}
+              />
 
-            <UnitsSelector
-              selectedUnit={state.selectedUnit}
-              onUnitChange={setUnit}
-            />
+              <UnitsSelector
+                selectedUnit={state.selectedUnit}
+                onUnitChange={setUnit}
+              />
 
-            <ActionButtons
-              onFitToScreen={handleFitToScreen}
-              onClearAll={clearAll}
-              hasImage={hasImage}
-              hasMeasurements={hasMeasurements}
-            />
+              <ActionButtons
+                onFitToScreen={handleFitToScreen}
+                onClearAll={clearAll}
+                hasImage={hasImage}
+                hasMeasurements={hasMeasurements}
+              />
+            </div>
           </div>
-        </div>
+        )}
+
+        {/* Mobile Sidebar Overlay */}
+        {isMobile && sidebarOpen && (
+          <>
+            {/* Backdrop */}
+            <div
+              className="absolute inset-0 bg-black bg-opacity-50 z-40"
+              onClick={() => setSidebarOpen(false)}
+            />
+
+            {/* Mobile Sidebar */}
+            <div className="absolute right-0 top-0 h-full w-80 bg-white border-l border-gray-200 p-4 overflow-y-auto z-50 transform transition-transform duration-300">
+              <div className="space-y-6">
+                <div className="flex items-center justify-between">
+                  <h2 className="text-lg font-semibold text-gray-900">Tools</h2>
+                  <button
+                    onClick={() => setSidebarOpen(false)}
+                    className="p-1 rounded-lg hover:bg-gray-100 transition-colors"
+                    aria-label="Close sidebar"
+                  >
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                  </button>
+                </div>
+
+                <ImageUpload onImageUpload={handleImageUpload} />
+
+                <ToolSelector
+                  activeMode={state.activeMode}
+                  onModeChange={setMode}
+                  hasImage={hasImage}
+                />
+
+                <CalibrationPanel
+                  calibration={state.calibration}
+                  selectedUnit={state.selectedUnit}
+                  onDistanceChange={setCalibrationDistance}
+                  onUnitChange={setUnit}
+                  activeMode={state.activeMode}
+                />
+
+                <MeasurementPanel
+                  lines={state.lines}
+                  points={state.points}
+                  selectedUnit={state.selectedUnit}
+                  pixelsPerUnit={state.calibration.pixelsPerUnit}
+                  onClearAll={clearAll}
+                  activeMode={state.activeMode}
+                />
+
+                <UnitsSelector
+                  selectedUnit={state.selectedUnit}
+                  onUnitChange={setUnit}
+                />
+
+                <ActionButtons
+                  onFitToScreen={handleFitToScreen}
+                  onClearAll={clearAll}
+                  hasImage={hasImage}
+                  hasMeasurements={hasMeasurements}
+                />
+              </div>
+            </div>
+          </>
+        )}
       </div>
     </div>
   );
