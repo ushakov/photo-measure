@@ -13,7 +13,7 @@
 *   **AS A user, I want to select two points on the image representing a known distance (e.g., a ruler)** so that the application can calibrate measurements.
 *   **AS A user, I want to enter the actual distance between the two calibration points** so that the application can calculate the pixel-to-unit ratio.
 *   **AS A user, I want to add multiple measurement points on the image** so that I can define the start and end of distances I want to measure.
-*   **AS A user, I want to define pairs of measurement points** so that the application can calculate and display the distance between them.
+*   **AS A user, I want measurement points to automatically pair** (2nd with 1st, 4th with 3rd, etc.) so that the application can calculate and display distances without manual line creation.
 *   **AS A user, I want to see the calculated distance displayed next to the line connecting two measurement points** so that I can easily read the results.
 *   **AS A user, I want to be able to move existing measurement points (both calibration and measurement)** so that I can refine my selections.
 *   **AS A user, I want to delete specific measurement points or lines** so that I can correct errors or remove unnecessary data.
@@ -64,11 +64,13 @@
 *   **Point Placement:**
     *   Click on the image to add a new measurement point.
     *   Points are incrementally numbered (e.g., M1, M2) or clearly distinguishable.
-*   **Defining Measurement Pairs:**
-    *   After placing multiple points, the user can select two existing measurement points (e.g., by clicking M1 then M3) to define a line segment for measurement.
-    *   Alternatively, a "Create Line" tool could activate, allowing the user to click P1 then P2 to form a new measurement line.
+*   **Automatic Line Creation:**
+    *   Lines are automatically created between measurement points using an auto-pairing system.
+    *   When an even number of measurement points exist, a line connects the last two points placed.
+    *   Pairing pattern: M2↔M1, M4↔M3, M6↔M5, etc.
+    *   **Workflow Example:** Place M1 → Place M2 (line auto-creates M1↔M2) → Place M3 → Place M4 (line auto-creates M3↔M4)
 *   **Line Drawing:**
-    *   Draws lines between explicitly defined pairs of measurement points.
+    *   Automatically draws lines between paired measurement points.
 *   **Distance Display:**
     *   Displays the calculated distance for each defined line segment, using the calibrated ratio and selected units.
     *   Text labels positioned near their respective lines.
@@ -80,7 +82,7 @@
 
 *   **Units Selector:** Global dropdown for measurement units (mm, cm, inches) affecting all measurements.
 *   **Clear All:** Button to remove all calibration and measurement points/lines.
-*   **Tool Selection:** Clearly visible buttons or a toolbar for switching between specific interaction modes (e.g., "Calibrate Points," "Add Measurement Points," "Define Measurement Lines"). Pan/Zoom is inherently available.
+*   **Tool Selection:** Clearly visible buttons or a toolbar for switching between interaction modes (e.g., "Calibrate," "Measure"). Lines are created automatically, so no separate "Define Lines" tool is needed. Pan/Zoom is inherently available.
 
 ---
 
@@ -111,7 +113,7 @@
     *   Distance text clearly legible and positioned near the line it corresponds to.
 *   **Active Tool Indication:** The currently active tool (Calibrate, Measure) should be visually highlighted (e.g., button change color, icon change). Pan/Zoom is assumed to be an always-on interaction.
 *   **Feedback Messages:** Small, non-intrusive messages for user actions (e.g., "Image uploaded successfully," "Please place two calibration points").
-*   **Cursor Changes:** Cursor should change to indicate current mode (e.g., crosshair for adding points, grab hand for panning, default pointer for selecting existing points).
+*   **Cursor Changes:** Cursor should change to indicate current mode (e.g., crosshair for adding points, grab hand for panning, default pointer for dragging existing points).
 
 **3.3 Responsiveness:**
 

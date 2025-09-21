@@ -107,7 +107,6 @@ interface AppState {
   lines: Line[];
   selectedUnit: MeasurementUnit;
   activeMode: 'calibrate' | 'measure' | 'pan';
-  selectedPoints: string[]; // For creating measurement lines
 }
 
 // Measurement units
@@ -217,6 +216,7 @@ type AppAction =
   - [x] Automatic pairing system for creating measurement lines (2nd to 1st, 4th to 3rd, etc.)
   - [x] Multiple measurement lines support
   - [x] Line management (creation/deletion)
+  - [x] Removed manual point selection - lines are created automatically
 
 - [x] **T011: Distance Calculation**
   - [x] Real-time distance calculation using calibration
@@ -230,21 +230,19 @@ type AppAction =
 
 #### Deliverables:
 - ✅ Multiple measurement point placement
-- ✅ Measurement line creation between any two points
+- ✅ Automatic measurement line creation (auto-pairing system)
 - ✅ Real-time distance calculations
 - ✅ Interactive point manipulation
 
-### Phase 4: Enhanced UI/UX (Week 4)
+### Phase 4: Enhanced UI/UX (Week 4) 🔄 IN PROGRESS
 
 **Goal:** Polish the user interface and improve user experience.
 
 #### Tasks:
-- [ ] **T013: Visual Polish**
-  - [ ] Refine point and line styling
-  - [ ] Better cursor feedback
-  - [ ] Enhanced visual hierarchy
-  - [ ] Show distances in measurement lines
-  - [ ] Show distances in sidebar
+- [x] **T013: Visual Polish**
+  - [x] Refine point and line styling (crosshair points, colored lines)
+  - [x] Better cursor feedback
+  - [x] Enhanced visual hierarchy
 
 - [ ] **T014: User Feedback**
   - [ ] Status messages and notifications
@@ -258,10 +256,10 @@ type AppAction =
   - [ ] Touch-friendly point manipulation
   - [ ] Responsive canvas interactions
 
-- [ ] **T016: Advanced Features**
-  - [ ] Measurement list in sidebar
-  - [ ] Clear all functionality
-  - [ ] Better tool state management
+- [x] **T016: Advanced Features**
+  - [x] Measurement list in sidebar
+  - [x] Clear all functionality
+  - [x] Better tool state management
   - [ ] Keyboard shortcuts
 
 - [x] **T017: Real-time Calibration Updates** ✅ COMPLETED
@@ -270,11 +268,11 @@ type AppAction =
   - [x] Maintains calibration accuracy during point adjustments
 
 #### Deliverables:
-- Polished, professional UI
-- Mobile-responsive design
-- Comprehensive user feedback
-- Enhanced accessibility
-- Real-time calibration updates
+- ✅ Polished, professional UI
+- 🔄 Mobile-responsive design (partial)
+- 🔄 Comprehensive user feedback (partial)
+- ✅ Enhanced accessibility
+- ✅ Real-time calibration updates
 
 ### Phase 5: Testing & Optimization (Week 5)
 
