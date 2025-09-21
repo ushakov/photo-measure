@@ -98,6 +98,7 @@ const AppContent: React.FC = () => {
       const stage = e.target;
       setPan(stage.x(), stage.y());
     }
+    isDraggingRef.current = false;
   }, [setPan]);
 
   const handlePointDrag = useCallback((pointId: string, x: number, y: number) => {
